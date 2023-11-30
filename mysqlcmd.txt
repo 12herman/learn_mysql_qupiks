@@ -1,0 +1,764 @@
+/*
+create table branch(
+branch_id int primary key auto_increment,
+br_name varchar(30) not null,
+addr varchar(200)
+);
+
+create table employee(
+emp_id int primary key auto_increment,
+ename varchar(30) not null,
+job_desc varchar(20),
+salarey int,
+branch_id int,
+constraint FK_branchId foreign key(branch_id) references branch(branch_id)
+);
+*/
+-- alter table employee drop constraint FK_branchId;
+
+/*
+insert into branch value(1,'APM','16 xyz road');
+insert into branch value(2,'RMP','23 xyz road');
+insert into branch value(3,'AMN','45 xyz road');
+insert into branch value(4,'JC','56 xyz road');
+
+insert into employee value(1, 'Herman','EMP',12000,2);
+insert into employee value(2, 'Yenok','Admin',12000,3);
+insert into employee value(3, 'Mancy','Manager',12000,2);
+insert into employee value(4, 'Edward','Sales',12000,1);
+insert into employee value(5, 'clares','HR',12000,4);
+insert into employee value(6, 'darwin','CEO',12000,4);
+insert into employee value(7, 'edwamy','EMP',12000,null);
+insert into employee value(8, 'sitharth','EMP',12000,null);
+insert into employee value(8, 'sitharth','EMP',12000,null);
+*/
+
+/*
+-- table
+select * from employee;
+select * from branch;
+
+desc employee;
+desc branch;
+
+-- inner-join
+select employee.emp_id,employee.ename,employee.job_desc,branch.br_name
+from employee
+inner join branch
+on employee.branch_id = branch.branch_id;
+
+-- where-inner-join
+select e.emp_id,e.ename,e.job_desc,b.br_name
+from employee as e, branch as b
+where e.branch_id = b.branch_id;
+
+-- left-join
+select e.emp_id,e.ename,e.job_desc,b.br_name
+from employee as e
+left join branch as b
+on e.branch_id = b.branch_id;
+
+-- cross-join-it's-not-use
+select e.emp_id,e.ename,e.job_desc,b.br_name
+from employee as e
+cross join branch as b;
+
+-- group-by-city
+select b.br_name, count(e.emp_id) count
+from branch as b
+join employee as e
+on b.branch_id = e.branch_id
+group by e.branch_id;
+*/
+
+/*
+-- Union
+create table a(a_id int not null primary key, a_name varchar(30),a_city varchar(45));
+create table b(b_id int not null primary key, b_name varchar(30),b_city varchar(45));
+
+insert into a value(1,"Herman","APM");
+insert into a value(2,"yenok","RMP");
+insert into a value(3,"edward","ARM");
+
+insert into b value(1,"Herman","APM");
+insert into b value(4,"yenok","RMP");
+insert into b value(5,"edward","ARM");
+
+select * from a
+union all
+select * from b
+*/
+
+/*
+create table sclass(
+c_id int not null primary key,
+c_name varchar(30),
+c_desc varchar(30)
+);
+
+create table students(
+s_id int primary key not null,
+s_name varchar(30),
+s_class int,
+constraint FK_class foreign key(s_class) references sclass(c_id)
+);
+*/
+
+/*
+insert into sclass value(01, '1st class', 'age 2 to 3');
+insert into sclass value(02, '2st class', 'age 3 to 4');
+insert into sclass value(03, '3st class', 'age 4 to 5');
+
+insert into students value(1,'Herman',02);
+insert into students value(2,'Edward',01);
+insert into students value(3,'Yenok',01);
+*/
+
+/*
+select s.s_id,s.s_name,c.c_name,c.c_desc
+from students as s
+left join sclass as c
+on s.s_class = c.c_id;
+
+select * from sclass;
+select * from students;
+
+select c.c_name, count(s.s_id) class_count
+from sclass as c
+join students as s
+on c.c_id = s.s_class
+group by s.s_class;
+
+select * from sclass;
+-- alter table employee drop constraint FK_branchId;
+*/
+
+/*
+create table usertype(
+userid int primary key, 
+usertype varchar(20)
+);
+
+create table networkname(
+netid int primary key,
+netname varchar(20)
+);
+
+CREATE TABLE qousers (
+  id INT PRIMARY KEY,
+  username VARCHAR(20),
+  usertype INT,
+  mono INT,
+  netname INT,
+  CONSTRAINT FK_usertype FOREIGN KEY (usertype) REFERENCES usertype(userid),
+  CONSTRAINT FK_networkname FOREIGN KEY (netname) REFERENCES networkname(netid)
+);
+*/
+
+/*
+insert into usertype value (1,'Admin');
+insert into usertype value (2,'Editor');
+insert into usertype value (3,'Viewer');
+
+insert into networkname value (1,'jio');
+insert into networkname value (2,'airtel');
+insert into networkname value (3,'vodofone');
+
+
+insert into qousers value(1,'Herman',1,6,1);
+insert into qousers value(2,'yenok',2,5,2);
+insert into qousers value(3,'blessy',3,7,3);
+insert into qousers value(4,'edward',3,8,1);
+insert into qousers value(5,'clares',2,937,1);
+insert into qousers value(6,'mancy',2,236,1);
+insert into qousers value(7,'gnancy',2,336,2);
+insert into qousers value(8,'angle',3,136,3);
+insert into qousers value(9,'pandian',3,036,2);
+*/
+
+/*
+select * from qousers;
+select * from usertype;
+select * from networkname;
+
+select a.id,a.username,b.usertype,c.netname,a.mono
+from qousers as a
+join usertype as b on a.usertype = b.userid
+join networkname as c on a.netname = c.netid;
+
+select * from qousers where not username = 'blessy';
+*/
+
+
+/*
+DELIMITER $$
+create procedure getbranches()
+begin
+declare total int default 0;
+select count(id)
+into total
+from qousers;
+select total;
+end $$
+DELIMITER ;  
+
+call getbranches();
+drop procedure if exists getbranches;
+
+select count(id) from qousers;
+*/
+
+
+/*
+-- input peramenter
+DELIMITER $$
+create procedure inputpr(in input varchar(20))
+begin
+select count(netname) 
+from qousers
+where netname = input;
+end$$
+DELIMITER ;
+
+call employee('1');
+call employee('2');
+call employee('3');
+*/
+
+
+/*
+-- output peramenter
+DELIMITER $$
+create procedure outputpr(in inputs varchar(20), out total int)
+begin
+select count(netname)
+into total
+from qousers
+where netname = inputs;
+end$$
+DELIMITER ;
+
+call outputpr('2',@total);
+call outputpr('1',@total);
+select @total;
+
+drop procedure if exists outputpr;
+*/
+
+
+/*
+-- inout
+DELIMITER $$
+create procedure inoutpr(inout numbers int, in count int)
+begin
+set numbers = numbers + count;
+end$$
+DELIMITER ;
+
+set @numbers = 1;
+call inoutpr(@numbers,1);
+call inoutpr(@numbers,5);
+select @numbers;
+drop procedure if exists outputpr;
+*/
+
+/*
+-- if,ifelse
+DELIMITER $$
+create procedure ifelsepr(in a int)
+begin
+if a =1 or a=2 then
+select 'Hi Jesus';
+elseif a =3 then
+select 'Hello Jesus';
+else
+select 'Give me the correct number';
+end if;
+end$$
+DELIMITER ;
+
+drop procedure ifelsepr;
+
+call ifelsepr(1);
+*/
+
+/*
+-- switch case
+DELIMITER $$
+create procedure switchpr(in id int)
+begin
+case id
+when 1 then
+select 'number 1';
+when 2 then
+select 'number 2';
+else
+select 'give me the correct value';
+end case;
+end$$
+DELIMITER ;
+drop procedure switchpr;
+call switchpr(1);
+
+DELIMITER $$
+create procedure switchpralt(in id int)
+begin
+case 
+when id between 1 and 10  then
+select 'This 1 to 10 value';
+when id between 11 and 20  then
+select 'This 11 to 20 value';
+else 
+select 'give me the correct value';
+end case;
+end$$
+DELIMITER ;
+call switchpralt(22);
+drop procedure switchpralt;
+*/
+
+/*
+-- for-loop
+DELIMITER $$
+create procedure looppr()
+begin
+declare i int;
+declare str varchar(30);
+set i = 1;
+set str = '';
+looplable: loop if i>10 then leave looplable; 
+end if;
+set str = concat(str,i,'');
+set i = i+1;
+
+end loop;
+select str;
+end$$
+DELIMITER ;
+*/
+
+/*
+-- while-loop
+DELIMITER $$
+create procedure whilepr()
+begin
+declare i int;
+declare str varchar(50);
+set i =0;
+set str = '';
+while i<10 do 
+set i = i+1;
+set str = concat(str,i,'_');
+end while;
+
+select str;
+end$$
+DELIMITER ;
+call whilepr;
+drop procedure whilepr;
+*/
+
+/*
+-- until-or-repeat-loop
+DELIMITER $$
+create procedure untilrepeat()
+begin
+declare i int;
+declare str varchar(50);
+set i =0;
+set str = '';
+
+repeat 
+set i = i+1;
+set str = concat(str,i,' ');
+until i>10
+end repeat;
+
+select str;
+end$$
+DELIMITER ;
+call untilrepeat;
+drop procedure untilrepeat;
+*/
+
+/*
+create table branch(branch_id int primary key, br_name varchar(30),addr varchar(50));
+
+insert into branch value(1,'chennai','16 abc road');
+insert into branch value(2,'coimbatore','120 15th block');
+insert into branch value(3,'Mumbai','25 xyz road');
+insert into branch value(4,'Hydrabad','32 10th street');
+
+create table employee(emp_id int primary key, ename varchar(30), job_desc varchar(30),salary int(20), branch_id int,
+ constraint FK_brnachid foreign key(branch_id) references branch(branch_id));
+
+insert into employee value(1,'Ram','ADMIN',100000,2);
+insert into employee value(2,'Harini','MANAGER',250000,2);
+insert into employee value(3,'George','SALES',200000,1);
+insert into employee value(4,'Ramya','SALES',130000,2);
+insert into employee value(5,'Meena','HR',200000,3);
+insert into employee value(6,'Ashok','MANAGER',300000,1);
+insert into employee value(7,'Abdul','HR',200000,1);
+
+drop table networkname;
+drop table qousers;
+drop table usertype;
+
+select * from employee;
+select * from branch;
+desc employee;
+desc branch;
+
+
+select e.ename,concat(b.addr,' ',b.br_name) addrs
+from employee as e
+join branch as b
+where e.branch_id = b.branch_id;
+
+select ename,getBranchAddr(branch_id) addrs
+from employee;
+
+DELIMITER $$
+create function getBranchAddr(id int)
+returns varchar(50)
+deterministic
+begin
+declare fulladdr varchar(50);
+select concat( addr,' ',br_name) 
+into fulladdr
+from branch
+where branch_id = id;
+return fulladdr;
+end$$
+DELIMITER ;
+
+drop function getBranchAddr;
+show function status;
+*/
+
+
+/*
+-- left-right-inner-join
+drop procedure if exists insertBranch;
+delimiter $$
+create procedure insertBranch(
+in id int,
+in city varchar(30), 
+in addr varchar(30)
+)
+begin
+declare exit handler for 1062
+begin
+select concat('Dublicate key ',id,' can not into branch table') er;
+end;
+insert into branch value(id,city,addr);
+select * from branch;
+end$$
+delimiter ;
+call insertBranch(1,'TCR','12th stree apm');
+
+select * from employee;
+select * from branch;
+
+select e.emp_id,e.ename,e.job_desc,e.salary,b.br_name
+from employee as e
+left join branch as b
+on  e.branch_id = b.branch_id;
+
+insert into employee value(8,'Herman','SALES',100000,6);
+insert into employee value(9,'Yenok','HR',120000,7);
+
+
+create table bill(
+bid int primary key,
+bname varchar(30),
+bdate int(20));
+
+insert into bill value(1,'Herman',234);
+insert into bill value(2,'Yenok',567);
+insert into bill value(3,'Mancy',890);
+insert into bill value(4,'Clares',101);
+insert into bill value(5,'Edward',112);
+insert into bill value(6,'Blessy',131);
+
+create table sales(
+sid int primary key,
+bid int,
+pid int,
+quantity int);
+
+insert into sales value(1,1,1,4);
+insert into sales value(2,1,2,1);
+insert into sales value(3,1,3,5);
+insert into sales value(4,1,4,2);
+insert into sales value(5,2,1,2);
+insert into sales value(6,2,6,1);
+insert into sales value(7,2,3,5);
+insert into sales value(8,2,2,1);
+insert into sales value(9,3,7,1);
+insert into sales value(10,3,2,4);
+insert into sales value(11,3,8,1);
+
+-- left-join
+select * from bill;
+select * from sales;
+
+select bill.bid,bill.bname,bill.bdate,sales.sid,sales.bid,sales.pid,sales.quantity
+from bill
+left join sales
+on bill.bid = sales.bid;
+
+
+-- right-join
+select * from sales;
+select * from bill;
+
+select s.sid,s.bid,s.pid,s.quantity,b.bid,b.bname
+from sales as s
+join bill as b
+on s.bid = b.bid;
+*/
+
+-- ---------- Basic CMD -----------
+-- create
+create database basics; -- create a new database
+create table tablename(st_id int primary key auto_increment, st_name varchar(100),st_age int,st_dep varchar(100) default('PHYSICS')); -- table create 
+
+-- use
+use basics; -- database selection
+
+-- Edit or Update
+alter table student_info add st_activity varchar(30); -- add extra column table heading in the table end
+alter table users_tb change name f_name varchar(20); -- already irrukura heading ka change panna
+insert into student_info(st_name,st_age) value ('Herman', 12); -- add column data ippadi panna auto inncrement and default value work ahkum
+insert into student_info value(2,'Yenok',23,'Chemistory'); -- ipadi panna all value insert pannanum eillana error varum auto increment work ahkathu, default value um work ahkathu intha method la
+insert into student_info value(3,'Blessy',15,'Maths'),(4,'Mancy',14,'Chemistry'); -- multiple insert
+-- full row vaum change panna error varum etha panna error varathu 
+set sql_safe_updates = 0;
+update employee set start_date = '2023-08-01' where job_desc ='ADMIN';
+set sql_safe_updates = 1;  
+-- full row end----
+update employee set job_desc = 'ANALYST'; -- full row la uilla ellam change panna
+update employee set ename = 'Herman' where emp_id = 1; -- single cell la update panna use pananum
+alter table employee add column fname varchar(30) first; -- add first column in the table
+alter table employee add column fname varchar(20) after ename;
+                                    
+
+-- Delete
+drop database basics; -- delete a data base or
+drop schema bascics; -- delete a data base
+drop database if exists bascics; -- data erutha delete pannum eillana warning kattum
+drop table tablename; -- delete a table 
+alter table student_info drop st_activity; -- delete table column
+alter table student_infot drop column st_activity; -- delete table column 
+delete from employee where emp_id=1; -- delete full coloumn
+delete from employee where ename ='Herman' limit 1; -- this is not proper method limit 1 - is used to skip the eror 1175 full row delete a table
+truncate table employee; -- delete all data only. you will have the empty table use this cmd 
+
+
+-- saw 
+show databases; -- full databse
+show tables; -- database -> table --database select pannatha table kattum
+select * from student_info; -- table all data is visible
+
+
+
+-- filter 
+-- where (filler column rows)
+select * from employee where ename = 'Ram'; -- = erutha matum
+select * from employee where ename <> 'Ram'; -- not equal <> this reference != atha matum vetutu ellam
+select * from employee where salary < 200000; -- less than
+select * from employee where salary > 200000; -- grater than
+select * from employee where salary > 100000 and job_desc = 'MANAGER'; -- and (&&) gate
+select * from employee where job_desc = 'HR' or job_desc = 'SALES'; -- or ( || ) gate
+select * from employee where job_desc in('HR','SALES'); -- same for || or gate
+select * from employee where job_desc not in ('HR','SALES'); -- =! and <> replace in 2 
+select * from employee limit 5; -- unlimited data in table use this cmd to limit data in the table
+-- like or wildcards %(0 or more characters)
+-- one character (_)
+select * from employee where ename like 'a%'; -- a start ahkura name ellam varum 
+select * from employee where ename not like 'a%'; -- a start ahkatha name ellam varum
+select * from employee where ename like 'h%i'; -- h first letter num i last letter num varanum
+select * from employee where ename like '%i'; -- i last letter vatha athu mattum varum
+select * from employee where ename like '%e%'; -- center la 'e' nu vatha athu mattum filter ahke varum
+select * from employee where ename like '__i%'; -- __third character 'e' erukanum '%' athuku upram enna nalum erkalam
+-- distinct 
+select distinct job_desc from employee; -- do not show same data. same data va display pannathu
+-- orderby 
+select * from employee order by salary; -- sorting small to high || 0 to 10 default asc or
+select * from employee order by salary asc; 
+select * from employee order by salary desc; -- sort high to low || 10 to 0
+select * from employee order by salary,ename; -- sort first salary ya pannum next ename vachi sort pannum
+select * from employee order by (
+case job_desc
+when 'HR' then 1
+when 'MANAGER' then 2
+when 'SALES' then 3
+else 100 end
+),ename; -- case use to first,second,third premarity
+-- group by -group pa erutha mattum use panalam 
+select * from employee;
+select job_desc,avg(salary) from employee group by job_desc; -- avg salary find panna
+select job_desc,count(emp_id) count from employee group by job_desc; -- how much group of employee work on the company
+-- having (filter groups)
+select job_desc,count(emp_id) count from employee group by job_desc having count(emp_id)>0; -- group pa sort panna the having use pantroom
+select job_desc,count(emp_id) count from employee group by job_desc having count(emp_id)>0 order by job_desc; -- order last ta tha pananum ellam muduchathum
+select job_desc,count(emp_id) from employee where salary > 200000 group by job_desc having count(emp_id)>0 order by job_desc; -- 2lakh mela vakuravaka detail where use panni panalam
+
+
+
+-- copy table && clone table && tempory table
+create table employee_copy like employee; -- only clone the data strature and data types
+create table employee_copy as select * from employee; -- copy full table with all data
+-- ---------- Basic CMD END-----------
+
+
+
+-- --------- constraints -----------
+-- not-null
+create table notnull(
+id int not null,
+n_name varchar(30)
+);
+insert into notnull value(1, 'Herman');
+select * from notnull;
+insert into notnull value( not null, 'Yenok');
+drop table notnull;
+
+
+-- unique
+create table student_info(
+st_id int unique, 
+st_name varchar(100),
+st_age int,
+st_dep varchar(100),
+check(st_id >= 20)
+);
+insert into student_info value(1,'Herman',12,'Physics');
+insert into student_info value(not null,'Yenok',15,'Chemistry');
+insert into student_info value(null,'Mancy',17,'Maths');
+insert into student_info value(2,'Clares',24,'Ecnomis');
+insert into student_info value(3,'Edward',25,'Electronics');
+select * from student_info;
+drop table student_info;
+
+
+-- default
+create table student_info(
+st_id int, 
+st_name varchar(100),
+st_age int,
+st_dep varchar(50) default('Physics')
+);
+insert into student_info (st_id,st_name,st_age) values (4,'Blessy',12);
+select * from student_info;
+drop table student_info;
+
+
+-- primary key
+create table student_info(
+st_id int primary key auto_increment, 
+st_name varchar(100),
+st_age int,
+st_dep varchar(100) default('PHYSICS')
+);
+insert into student_info (st_name,st_age) values('Herman',12);
+select * from student_info;
+-- --------- constraints--END -----------
+
+
+
+-- Transaction --
+-- rollback
+use basics;
+start transaction; -- temp file
+savepoint initial; -- emp_id 7 vara uilla data save ahkedum initial point la
+insert into employee value(8,'Mancy','EMPLOYEE',400000,3); -- emp_id 8 new va add pantroom
+select * from employee; -- tablela pakuroom
+savepoint addition; -- emp_8 vara uilla tablela save panni vaikuroom addition ra pointla
+update employee set job_desc = 'EMPLOYEE' where emp_id = 8; -- emp_8 job-desc chanage to manager
+savepoint upd; -- emp_8 job-desc chanage to manager save panikuroom
+delete from employee where emp_id = 4; -- emp_id 4 delete pantrrom
+savepoint del;
+rollback to upd; -- undu
+rollback to addition; -- undu
+rollback to initial; -- undu 
+commit; -- tempfile-la eruthalum atha save panni next time close panni open panalum save la the erukum
+-- ------ Transaction END------
+
+
+-- date function && date
+select * from employee;
+alter table employee add column start_date date after job_desc;
+set sql_safe_updates = 0;
+update employee set start_date = '2023-08-01' where job_desc ='ADMIN';
+set sql_safe_updates = 1;
+select now(); -- yyyy-mm-dd hh-mm-ss
+select date(now()); -- current today date
+select current_date(); -- current today date
+select curdate(); -- current today date
+select date_format(curdate(),'%d-%m-%y'); -- formate change dd-mm-yy
+select datediff(curdate(),'2023/12/26'); -- different between the date
+select date_add(curdate(),interval 1 day); -- show the tomorrow date interval la yathana day ku next nu kudukalam
+select date_add(curdate(),interval 1 week); -- show the next 1week date
+-- ---- date end ----
+
+create table group_tb(
+gp_id int primary key auto_increment,
+gp_name varchar(20)
+);
+insert into group_tb(gp_name) value('Admin'),('Editor'),('Viewer');
+
+create table network_tb(
+net_id int primary key auto_increment,
+net_name varchar(20)
+);
+insert into network_tb(net_name) value ('Jio'),('Airtel'),('Vodafone');
+
+create table users_tb(
+ur_id int primary key auto_increment,
+name  varchar(30),
+gp_id int,
+net_id int,
+mno varchar(20),
+constraint FK_gp_id foreign key(gp_id) references group_tb(gp_id),
+constraint FK_net_id foreign key(net_id) references network_tb(net_id)
+);
+insert into users_tb(name,gp_id,net_id,mno) 
+value('Herman',1,1,'+916369975517'),
+	 ('Yenok',2,2,'+916469975514'),
+     ('Mancy',3,3,'+916569975515'),
+	 ('Clares',3,1,'+916869975518'),
+	 ('Edward',2,2,'+916969975519'),
+	 ('Blessy',3,2,'+916169975511'),
+	 ('Subi',3,1,'+916269975512');
+     
+     select * from users_tb;
+     select * from group_tb;
+     select * from network_tb;
+     
+     alter table users_tb add column l_name varchar(20) after f_name;
+	 alter table users_tb drop column l_name;
+     
+     select u.ur_id, u.f_name, g.gp_name, n.net_name, u.mno
+     from users_tb as u
+	 join group_tb as g
+	 join network_tb as n
+     on u.gp_id = g.gp_id and u.net_id = n.net_id 
+     order by ur_id;
+--      case 
+--      when g.gp_name = 'Admin' then 1
+--      when g.gp_name = 'Editor' then 2
+--      else 3 end asc;
+
+	 select u.ur_id, u.f_name, g.gp_name, n.net_name, u.mno
+     from users_tb as u
+	 join group_tb as g on g.gp_id = u.gp_id
+	 join network_tb as n on n.net_id = u.net_id limit 3 offset 2;
+     
+
+     
+	select * from users_tb;
+    update users_tb set ur_id =7 where ur_id= 8;
+    
+    select * from users_tb where f_name like '%a%';
